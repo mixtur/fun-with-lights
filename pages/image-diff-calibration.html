@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Christmas lights client</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .canvas-container {
+            height: calc(100vh - 140px);
+        }
+    </style>
+</head>
+<body>
+<button id="init-btn">Init camera</button>
+<button id="light-on">Light on</button>
+<button id="light-off">Light off</button>
+<div id="ui" class="hidden">
+    <div id="view-finder"></div>
+
+    <button id="capture1-btn">Capture 1</button>
+    <button id="capture2-btn">Capture 2</button>
+    <button id="compare-btn">Compare</button>
+    <button id="auto-capture-btn">Auto capture</button>
+
+    <div class="canvas-container">
+        <canvas id="current-result"></canvas>
+    </div>
+</div>
+
+<script type="module" src="../src/image-diff-page.ts"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+.lines-list
+  display: flex
+  flex-direction: column
+  gap: .5em
+  padding-top: env(safe-area-inset-top)
+  padding-left: 1em
+  padding-right: 1em
+
+  &__item
+    background: rgba(white, .5)
+    font-size: 0.8em
+  &__item-label
+    &--selected
+      background: red
