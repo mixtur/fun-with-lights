@@ -2,18 +2,18 @@ import { MouseEventHandler, ReactNode } from 'react';
 import { bem } from '@wgt3d/fr-bem';
 import './actions.sass';
 
-const {block, el} = bem('actions');
+const {block} = bem('actions');
 
 export interface ShootLineProps {
-    onClick?: MouseEventHandler<HTMLButtonElement>;
+    onShoot?: MouseEventHandler<HTMLButtonElement>;
+    onRestart?: MouseEventHandler<HTMLButtonElement>;
+    onConfirm?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export function Actions({onClick}: ShootLineProps): ReactNode {
+export function Actions({onShoot, onRestart, onConfirm}: ShootLineProps): ReactNode {
     return <>
-        <div className={block()}>
-            <div><button onClick={onClick}>Shoot line</button></div>
-            <div><button onClick={onClick}>Delete all lines</button></div>
-            <div><button onClick={onClick}>Confirm position</button></div>
-        </div>
+        <button className={block('shoot')} onClick={onShoot}>Shoot line</button>
+        <button className={block('restart')} onClick={onRestart}>Delete all lines</button>
+        <button className={block('confirm')} onClick={onConfirm}>Next point</button>
     </>;
 }

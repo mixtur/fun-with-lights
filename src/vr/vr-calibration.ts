@@ -79,6 +79,15 @@ export class VRCalibration {
                     } else {
                         this.currentPoint = null;
                     }
+                },
+                onConfirm: () => {
+                    if (this.currentPoint === null) return;
+                    this.currentGroup.points.push(this.currentPoint);
+                    this.currentPoint = null;
+                    this.lines = [];
+                },
+                onRestart: () => {
+                    this.lines = [];
                 }
             });
             this.isRunning = true;

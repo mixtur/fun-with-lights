@@ -11,7 +11,9 @@ export interface VRExternalState {
 
 export interface VROverlayConfig {
     onSelectLine?: LinesListProps['onSelectLine'];
-    onShootLine?: ShootLineProps['onClick'];
+    onShootLine?: ShootLineProps['onShoot'];
+    onRestart?: ShootLineProps['onRestart'];
+    onConfirm?: ShootLineProps['onConfirm'];
 }
 
 export interface VROverlayProps extends VRExternalState, VROverlayConfig {
@@ -31,9 +33,13 @@ export class VROverlay extends Component<VROverlayProps> {
             );
         }
         return <>
+{/*
             <LinesList lines={this.props.linesList!}
                        onSelectLine={this.props.onSelectLine} />
-            <Actions onClick={this.props.onShootLine} />
+*/}
+            <Actions onShoot={this.props.onShootLine}
+                     onRestart={this.props.onRestart}
+                     onConfirm={this.props.onConfirm}/>
         </>;
     }
 }
