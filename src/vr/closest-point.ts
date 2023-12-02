@@ -1,16 +1,16 @@
-type Vec3 = [number, number, number];
+export type Vec3 = [number, number, number];
 type Mat3 = [Vec3, Vec3, Vec3];
 
 const dot = (a: Vec3, b: Vec3): number => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 
-const find_nearest_point = (p: Vec3, a: Vec3[], d: Vec3[], n: number): void => {
+export const find_nearest_point = (a: Vec3[], d: Vec3[], n: number): Vec3 => {
     const m: Mat3 = [
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 0]
     ];
 
-    const b = [0, 0, 0];
+    const b: Vec3 = [0, 0, 0];
 
     for (let i = 0; i < n; i++) {
         const d2 = dot(d[i], d[i]);
@@ -23,9 +23,44 @@ const find_nearest_point = (p: Vec3, a: Vec3[], d: Vec3[], n: number): void => {
             b[ii] += d[i][ii] * da - a[i][ii] * d2;
         }
 
-        solve(m, b, p, 3);
     }
+    return solve(m, b);
 };
+
+const det3 = (m: Mat3): number => {
+    const [
+        [a, b, c],
+        [d, e, f],
+        [g, h, i]
+    ] = m;
+
+    return (a*e*i + b*f*g + c*d*h)
+         - (c*e*g + b*d*i + a*f*h);
+};
+
+const substitute_row = (m: Mat3, v: Vec3, i: number): Mat3 => {
+    const result: Mat3 = [...m];
+    result[i] = v;
+    return result;
+};
+
+const substitute_col = (m: Mat3, v: Vec3, col_index: number): Mat3 => {
+    const result: Mat3 = m.map((r: Vec3): Vec3 => [...r]) as Mat3;
+    for (let i = 0; i < 3; i++) {
+        result[i][col_index] = v[i];
+    }
+    return result;
+};
+
+
+const solve = (m: Mat3, b: Vec3): Vec3 => {
+    const d = det3(m);
+    const d0 = det3(substitute_col(m, b, 0));
+    const d1 = det3(substitute_col(m, b, 1));
+    const d2 = det3(substitute_col(m, b, 2));
+
+    return [d0 / d, d1 / d, d2 / d];
+}
 
 // A simple verifier.
 const dist2 = (p: Vec3, a: Vec3, d: Vec3): number => {
@@ -68,30 +103,3 @@ const normalize = (v: Vec3): void => {
     v[1] /= len;
     v[2] /= len;
 }
-
-// void solve(double *a, double *b, double *x, int n)
-// {
-// #define A(y, x) (*mat_elem(a, y, x, n))
-//   int i, j, col, row, max_row, dia;
-//   double max, tmp;
-//
-//   for (dia = 0; dia < n; dia++) {
-//     max_row = dia, max = fabs(A(dia, dia));
-//     for (row = dia + 1; row < n; row++)
-//       if ((tmp = fabs(A(row, dia))) > max) max_row = row, max = tmp;
-//     swap_row(a, b, dia, max_row, n);
-//     for (row = dia + 1; row < n; row++) {
-//       tmp = A(row, dia) / A(dia, dia);
-//       for (col = dia+1; col < n; col++)
-//         A(row, col) -= tmp * A(dia, col);
-//       A(row, dia) = 0;
-//       b[row] -= tmp * b[dia];
-//     }
-//   }
-//   for (row = n - 1; row >= 0; row--) {
-//     tmp = b[row];
-//     for (j = n - 1; j > row; j--) tmp -= x[j] * A(row, j);
-//     x[row] = tmp / A(row, row);
-//   }
-// #undef A
-// }

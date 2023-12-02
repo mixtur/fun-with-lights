@@ -1,6 +1,7 @@
 import { WebGLVR } from './vr-gl.ts';
-import { Line } from './lines.ts';
+import {Line, Point} from './types.ts';
 import { XRReactOverlayController } from './overlay/main.tsx';
+import {find_nearest_point, Vec3} from "./closest-point.ts";
 
 const getXr = (): XRSystem => {
     if (navigator.xr) {
@@ -13,11 +14,6 @@ type XRRafRequestResult = {
     time: number;
     xrFrame: XRFrame;
 } | null;
-
-interface Point {
-    id: number;
-    position: Float32Array;
-}
 
 interface PointGroup {
     aligned: boolean;
@@ -69,6 +65,20 @@ export class VRCalibration {
                 },
                 onShootLine: () => {
                     this.lines.push(this.viewLine);
+                    const position = find_nearest_point(
+                        this.lines.map(l => [...l.position] as Vec3),
+                        this.lines.map(l => [...l.direction] as Vec3),
+                        this.lines.length
+                    );
+
+                    if (position.every(Number.isFinite)) {
+                        this.currentPoint = {
+                            id: 0,
+                            position: new Float32Array(position)
+                        }
+                    } else {
+                        this.currentPoint = null;
+                    }
                 }
             });
             this.isRunning = true;
@@ -129,7 +139,16 @@ export class VRCalibration {
             const zAxis = view.transform.matrix.slice(8, 11);
 
             this.viewLine = { position, direction: zAxis };
-            this.glViewer.drawFrame(this.glLayer, viewerPose, this.lines);
+            this.glViewer.drawFrame(
+                this.glLayer,
+                viewerPose,
+                this.lines,
+                [
+                    ...this.currentGroup.points,
+                    ...this.pointGroups.flatMap(g => g.points)
+                ],
+                this.currentPoint
+            );
         }
     }
 }

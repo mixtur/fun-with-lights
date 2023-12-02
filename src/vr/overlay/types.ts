@@ -1,4 +1,4 @@
-import { Line } from '../lines.ts';
+import { Line } from '../types.ts';
 
 export interface OverlayLine extends Line {
 }
