@@ -1,5 +1,5 @@
 import { createRoot, Root } from 'react-dom/client';
-import {VRExternalState, VROverlay, VROverlayConfig, VROverlayProps} from './vr-overlay.tsx';
+import {VRExternalState, VROverlay, VROverlayConfig} from './vr-overlay.tsx';
 
 export class XRReactOverlayController {
     root!: Root;

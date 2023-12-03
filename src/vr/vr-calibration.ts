@@ -60,9 +60,6 @@ export class VRCalibration {
                 }
             });
             this.overlay.start(domOverlay, {
-                onSelectLine: (selectedIndex: number) => {
-                    console.log(selectedIndex);
-                },
                 onShootLine: () => {
                     this.lines.push(this.viewLine);
                     const position = find_nearest_point(
@@ -88,6 +85,7 @@ export class VRCalibration {
                 },
                 onRestart: () => {
                     this.lines = [];
+                    this.currentPoint = null;
                 }
             });
             this.isRunning = true;
@@ -132,6 +130,7 @@ export class VRCalibration {
             if (viewerPose == undefined) {
                 this.overlay.update({
                     hasViewerPose: false,
+                    isPositionEmulated: false,
                     linesList: []
                 })
                 continue;
@@ -139,6 +138,7 @@ export class VRCalibration {
 
             this.overlay.update({
                 hasViewerPose: true,
+                isPositionEmulated: viewerPose.emulatedPosition,
                 linesList: [...this.lines]
             })
 
